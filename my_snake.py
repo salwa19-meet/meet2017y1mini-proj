@@ -7,7 +7,7 @@ turtle.tracer(1,0)
 
 SIZE_X = 800
 SIZE_Y = 500
-turtle.setup(SIZE_X, SIZE_Y)
+turtle.setup(SIZE_X+50, SIZE_Y+50)
 
 turtle.penup()
 
@@ -18,6 +18,18 @@ UP_EDGE = 250
 DOWN_EDGE = -250
 RIGHT_EDGE = 400
 LEFT_EDGE = -400
+
+drawer = turtle.clone()
+drawer.penup()
+drawer.goto(-400 , 250)
+drawer.pendown()
+drawer.goto(400 , 250)
+drawer.goto(400 , -250)
+drawer.goto(-400 , -  250)
+drawer.goto(-400 , 250)
+
+
+
 
 # Initialize lists
 pos_list = []
@@ -31,6 +43,7 @@ snake = turtle.clone()
 snake.shape('square')
 
 turtle.hideturtle()
+score_turtle = turtle.clone()
 
 for num in range(START_LENGTH):
     x_pos = snake.pos()[0]
@@ -117,7 +130,8 @@ def move_snake():
         make_food()
         score = score + 1
         score_list.append(score)
-        turtle.write("score : "+ str(score))
+        score_turtle.clear()
+        score_turtle.write("score : "+ str(score))
     else:
     # what happens normally when you don't eat food
     ######
