@@ -31,6 +31,8 @@ drawer.goto(-400 , 250)
 
 
 
+
+
 # Initialize lists
 pos_list = []
 stamp_list = []
@@ -158,7 +160,8 @@ def move_snake():
         print("you ate yourself")
         quit()
 
-        
+
+   
 
     turtle.ontimer(move_snake,TIME_STEP)
 #####################################
@@ -179,4 +182,8 @@ for this_food_pos in food_pos:
     food.goto(this_food_pos)
     food_ID = food.stamp()
     food_stamps.append(food_ID)
+
+
+
+snake.color('green')
 turtle.mainloop()
