@@ -12,7 +12,7 @@ turtle.setup(SIZE_X, SIZE_Y)
 turtle.penup()
 
 SQUARE_SIZE = 20
-START_LENGTH = 6
+START_LENGTH = 1
 
 UP_EDGE = 250
 DOWN_EDGE = -250
@@ -24,7 +24,8 @@ pos_list = []
 stamp_list = []
 food_pos = []
 food_stamps = []
-
+score_list = []
+score = 0
 #Set up postions (x,y) of boxes that make up the snake
 snake = turtle.clone()
 snake.shape('square')
@@ -57,10 +58,10 @@ direction = UP
 def make_food():
     min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
     max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
-    food_x = random.randint(min_x,max_x)
-    food_y = random.randint(min_y,max_y)
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
     
     food.goto(food_x, food_y)
     food_pos.append((food_x, food_y))
@@ -105,17 +106,25 @@ def move_snake():
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp)
-    global food_stamps, food_pos
+    global score
     if snake.pos() in food_pos:
+    # What happens when you eat food
         food_ind=food_pos.index(snake.pos())
         food.clearstamp(food_stamps[food_ind])
         food_pos.pop(food_ind)
         food_stamps.pop(food_ind)
         print("you have eaten the food!")
-    old_stamp = stamp_list.pop(0)
-    snake.clearstamp(old_stamp)
-    pos_list.pop(0)
-
+        make_food()
+        score = score + 1
+        score_list.append(score)
+        turtle.write("score : "+ str(score))
+    else:
+    # what happens normally when you don't eat food
+    ######
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        pos_list.pop(0)
+    ########
     new_pos = snake.pos()
     new_x_pos = new_pos[0]
     new_y_pos = new_pos[1]
@@ -130,7 +139,12 @@ def move_snake():
         quit()
     if new_y_pos <= DOWN_EDGE:
         print("you hit the left edge! game over!")
-        quit()   
+        quit()
+    if snake.pos() in pos_list[0:-1]:
+        print("you ate yourself")
+        quit()
+
+        
 
     turtle.ontimer(move_snake,TIME_STEP)
 #####################################
@@ -145,7 +159,7 @@ move_snake()
 turtle.register_shape("trash.gif")
 food = turtle.clone()
 food.shape("trash.gif")
-food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+food_pos = [(100,100)]
 food_stamps = []
 for this_food_pos in food_pos:
     food.goto(this_food_pos)
